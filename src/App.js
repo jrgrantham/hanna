@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Cell from "./components/Cell";
 import { width, height } from "./components/Cell";
 import { useInterval } from "./helpers/useInterval";
+import cock from "./images/Eggplant.png";
 
 const stageWidth = width;
 const stageHeight = height;
@@ -144,6 +145,8 @@ function App() {
   const [dropTime, setDropTime] = useState(null);
   const [showbutton, setShowbutton] = useState(true);
   const [showMessage, setShowMessage] = useState(false);
+  const [wait, setWait] = useState(false);
+  const [theEnd, setTheEnd] = useState(false);
 
   function updatedStage(rowY, colX) {
     const newStage = stage.map((row, y) =>
@@ -181,20 +184,42 @@ function App() {
   }
 
   function message() {
-    setTimeout(function () {
+    setTimeout(() => {
       setShowMessage(true);
     }, 1500);
+    setTimeout(() => {
+      setWait(true);
+    }, 5000);
+    setTimeout(() => {
+      setTheEnd(true);
+    }, 10000);
   }
 
   return (
     <Container>
-      {stage.map((row) =>
-        row.map((cell, x) => <Cell key={x} opacity={cell[0]} color={cell[1]} />)
+      {theEnd ? (
+        <img src={cock} alt="cock" />
+      ) : (
+        <>
+          {stage.map((row) =>
+            row.map((cell, x) => (
+              <Cell key={x} opacity={cell[0]} color={cell[1]} />
+            ))
+          )}
+          <div className='massages'>
+            {showbutton ? <button onClick={start}>Start</button> : null}
+            {showMessage ? (
+              <h6>and I can't wait to start our life together</h6>
+            ) : null}
+            {wait ? (
+              <div>
+                <br></br>
+                <h6>wait for it...</h6>
+              </div>
+            ) : null}
+          </div>
+        </>
       )}
-      {showbutton ? <button onClick={start}>Start</button> : null}
-      {showMessage ? (
-        <h6>and I can't wait to start our life together</h6>
-      ) : null}
     </Container>
   );
 }
@@ -222,8 +247,14 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
 
+  /* .messages {
+    display: flex;
+    justify-content: center;
+  } */
+
   h6 {
     font-size: 0.8rem;
+    text-align: center;
   }
 
   button {
