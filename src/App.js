@@ -142,7 +142,8 @@ finalStage[8][52] = [0, "hotpink"];
 function App() {
   const [stage, setStage] = useState(startStage);
   const [dropTime, setDropTime] = useState(null);
-  const [showbutton, setShowbutton] = useState(true)
+  const [showbutton, setShowbutton] = useState(true);
+  const [showMessage, setShowMessage] = useState(false);
 
   function updatedStage(rowY, colX) {
     const newStage = stage.map((row, y) =>
@@ -167,16 +168,22 @@ function App() {
 
   useInterval(() => {
     if (nodeList.length === 0) {
-      setDropTime(null)
+      setDropTime(null);
+      message();
     }
     selectCell();
     console.log("running");
-
   }, dropTime);
 
   function start() {
-    setShowbutton(false)
-    setDropTime(35)
+    setShowbutton(false);
+    setDropTime(35);
+  }
+
+  function message() {
+    setTimeout(function () {
+      setShowMessage(true);
+    }, 1500);
   }
 
   return (
@@ -185,7 +192,9 @@ function App() {
         row.map((cell, x) => <Cell key={x} opacity={cell[0]} color={cell[1]} />)
       )}
       {showbutton ? <button onClick={start}>Start</button> : null}
-      {/* {nodeList.length ? null :  <div>{nodeList.length}</div>} */}
+      {showMessage ? (
+        <h6>and I can't wait to start our life together</h6>
+      ) : null}
     </Container>
   );
 }
@@ -205,12 +214,17 @@ export default App;
 
 const Container = styled.div`
   display: flex;
+  /* flex-direction: column; */
   justify-content: center;
   margin: auto;
   margin-top: 50px;
   width: 90%;
   display: flex;
   flex-wrap: wrap;
+
+  h6 {
+    font-size: 0.8rem;
+  }
 
   button {
     font-size: 1rem;
